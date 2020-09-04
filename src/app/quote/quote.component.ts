@@ -2,6 +2,8 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {QuoteService} from '../services/quote.service';
 import {Quote} from '../models/quote';
 import {NgForm} from '@angular/forms';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {DeleteModalComponent} from '../delete-modal/delete-modal.component';
 
 @Component({
   selector: 'app-quote',
@@ -13,8 +15,9 @@ export class QuoteComponent implements OnInit {
   @ViewChild('ref') quoteForm: NgForm;
   targetQuote: Quote;
   updating = false;
+  deleteSuccess = false;
 
-  constructor(private quoteService: QuoteService) {}
+  constructor(private quoteService: QuoteService, private modalService: NgbModal) {}
 
   ngOnInit(): void {
     console.log(this.quotes);
@@ -81,8 +84,23 @@ export class QuoteComponent implements OnInit {
     return this.targetQuote.id === quoteId;
   }
 
-  delete(quoteId: number) {
+  onDelete(quoteId: number) {
     console.log(quoteId);
+    this.quoteService.deleteQuote(quoteId)
+      .subscribe(_ => {
+        this.quotes = this.quotes
+          .filter(quote => quote.id !== quoteId);
+        this.deleteSuccess = true;
+      });
+  }
+
+  openModal(quoteId: number) {
+    this.modalService.open(DeleteModalComponent).result.then((result) => {
+      if (result === 'Delete') {
+        console.log(result);
+        this.onDelete(quoteId);
+      }
+    });
   }
 
 }

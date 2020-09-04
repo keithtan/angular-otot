@@ -1,4 +1,7 @@
 <div class="container">
+  <ngb-alert *ngIf="deleteSuccess" type="success" (close)="deleteSuccess=false">
+    The quote has been deleted successfully.
+  </ngb-alert>
   <form (ngSubmit)="onSave(ref)" #ref='ngForm'>
     <div class="form-group row">
       <label for="content" class="col-sm-2 col-form-label">Content: </label>
@@ -29,7 +32,7 @@
           <div class="card-body">
             <blockquote class="blockquote mb-0">
               <i class="fa fa-quote-left"></i>
-              <i (click)="delete(quote.id)" class="fa fa-trash float-right"></i>
+              <i (click)="openModal(quote.id)" class="fa fa-trash float-right"></i>
               <i (click)="update(quote)" class="fa fa-pencil float-right"></i>
               <br>
               <div *ngIf="isEditing(quote.id); else showContent">
@@ -42,7 +45,6 @@
                     </span>
                     Save
                   </button>
-
                   <div class="clearfix"></div>
                 </form>
               </div>

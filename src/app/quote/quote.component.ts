@@ -12,6 +12,7 @@ export class QuoteComponent implements OnInit {
   quotes: Quote[] = [];
   @ViewChild('ref') quoteForm: NgForm;
   targetQuote: Quote;
+  updating = false;
 
   constructor(private quoteService: QuoteService) {}
 
@@ -50,21 +51,30 @@ export class QuoteComponent implements OnInit {
   }
 
   onUpdate(form: NgForm) {
+    this.updating = true;
     const content = form.value.quoteContent;
     const author = form.value.authorContent;
     const id = this.targetQuote.id;
-    const quote = new Quote(content, author, id);
-    console.log(quote);
+    const updatedQuote = new Quote(content, author, id);
+    console.log(updatedQuote);
+    this.quoteService.updateQuote(updatedQuote)
+      .subscribe(_ => {
+        this.quotes.filter(quote => quote.id === id)
+          .map(quote => {
+            console.log(quote);
+            quote.content = content;
+            quote.author = author;
+            this.updating = false;
+          });
+        this.targetQuote = undefined;
+      });
   }
 
   update(quote: Quote) {
-    console.log(quote);
     this.targetQuote = quote;
-    console.log(this.targetQuote);
   }
 
   isEditing(quoteId: number): boolean {
-    console.log(this.targetQuote);
     if (this.targetQuote === undefined) {
       return false;
     }

@@ -36,7 +36,13 @@
                 <form (ngSubmit)="onUpdate(ref)" #ref='ngForm'>
                   <input type="text" class="form-control" name="quoteContent" [ngModel]="targetQuote.content">
                   <input type="text" class="form-control" name="authorContent" [ngModel]="targetQuote.author">
-                  <button type="submit" class="btn btn-primary mb-2" style="float: right;">Save</button>
+                  <button type="submit" class="btn btn-primary mb-2" style="float: right;">
+                    <span *ngIf="updating">
+                      <i class="fa fa-spinner fa-spin"></i>
+                    </span>
+                    Save
+                  </button>
+
                   <div class="clearfix"></div>
                 </form>
               </div>

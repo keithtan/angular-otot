@@ -8,7 +8,7 @@ import {throwError} from 'rxjs';
   providedIn: 'root'
 })
 export class QuoteService {
-  quoteUrl = 'https://spring-rest-otot.herokuapp.com/quotes';
+  private quoteUrl = 'https://spring-rest-otot.herokuapp.com/quotes';
 
   constructor(private http: HttpClient) { }
 
@@ -21,6 +21,13 @@ export class QuoteService {
 
   addQuote(quote: Quote) {
     return this.http.post<Quote>(this.quoteUrl, quote)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  updateQuote(quote: Quote) {
+    return this.http.put<Quote>(`${this.quoteUrl}/${quote.id}`, quote)
       .pipe(
         catchError(this.handleError)
       );

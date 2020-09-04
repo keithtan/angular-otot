@@ -19,6 +19,13 @@ export class QuoteService {
       );
   }
 
+  addQuote(quote: Quote) {
+    return this.http.post<Quote>(this.quoteUrl, quote)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

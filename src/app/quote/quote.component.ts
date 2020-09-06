@@ -2,8 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {QuoteService} from '../services/quote.service';
 import {Quote} from '../models/quote';
 import {NgForm} from '@angular/forms';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {DeleteModalComponent} from '../delete-modal/delete-modal.component';
+import {QuoteCardComponent} from '../quote-card/quote-card.component';
 
 @Component({
   selector: 'app-quote',
@@ -13,12 +12,10 @@ import {DeleteModalComponent} from '../delete-modal/delete-modal.component';
 export class QuoteComponent implements OnInit {
   quotes: Quote[] = [];
   @ViewChild('ref') quoteForm: NgForm;
-  targetQuote: Quote;
-  saving = false;
-  updating = false;
+  @ViewChild(QuoteCardComponent) private quoteCardComponent: QuoteCardComponent;
   deleteSuccess = false;
 
-  constructor(private quoteService: QuoteService, private modalService: NgbModal) {}
+  constructor(private quoteService: QuoteService) {}
 
   ngOnInit(): void {
     console.log(this.quotes);
@@ -43,50 +40,19 @@ export class QuoteComponent implements OnInit {
     return typeof val !== 'string';
   }
 
-  onSave(form: NgForm) {
-    this.saving = true;
-    const content = form.value.quoteContent;
-    const author = form.value.authorContent;
-    const quote = new Quote(content, author);
-    console.log(quote);
-    this.quoteService
-      .addQuote(quote)
-      .subscribe(newQuote => {
-        this.quotes.push(newQuote);
-        this.saving = false;
-      });
-    this.quoteForm.reset();
-  }
-
-  onUpdate(form: NgForm) {
-    this.updating = true;
-    const content = form.value.quoteContent;
-    const author = form.value.authorContent;
-    const id = this.targetQuote.id;
-    const updatedQuote = new Quote(content, author, id);
-    console.log(updatedQuote);
+  onUpdate(updatedQuote: Quote) {
+    this.quoteCardComponent.updating = true;
     this.quoteService.updateQuote(updatedQuote)
       .subscribe(_ => {
-        this.quotes.filter(quote => quote.id === id)
+        this.quotes.filter(quote => quote.id === updatedQuote.id)
           .map(quote => {
             console.log(quote);
-            quote.content = content;
-            quote.author = author;
-            this.updating = false;
+            quote.content = updatedQuote.content;
+            quote.author = updatedQuote.author;
+            this.quoteCardComponent.updating = false;
           });
-        this.targetQuote = undefined;
+        this.quoteCardComponent.targetQuote = undefined;
       });
-  }
-
-  update(quote: Quote) {
-    this.targetQuote = quote;
-  }
-
-  isEditing(quoteId: number): boolean {
-    if (this.targetQuote === undefined) {
-      return false;
-    }
-    return this.targetQuote.id === quoteId;
   }
 
   onDelete(quoteId: number) {
@@ -97,15 +63,6 @@ export class QuoteComponent implements OnInit {
           .filter(quote => quote.id !== quoteId);
         this.deleteSuccess = true;
       });
-  }
-
-  openModal(quoteId: number) {
-    this.modalService.open(DeleteModalComponent).result.then((result) => {
-      if (result === 'Delete') {
-        console.log(result);
-        this.onDelete(quoteId);
-      }
-    });
   }
 
 }

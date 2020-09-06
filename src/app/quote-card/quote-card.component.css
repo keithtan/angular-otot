@@ -1,0 +1,11 @@
+.fa-trash:hover {
+  color: red;
+}
+
+.fa-pencil:hover {
+  color: yellow;
+}
+
+.fa-pencil {
+  margin-right: 5px;
+}

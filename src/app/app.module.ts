@@ -11,13 +11,15 @@ import {FormsModule} from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { DeleteModalComponent } from './delete-modal/delete-modal.component';
 import { QuoteAddComponent } from './quote-add/quote-add.component';
+import { QuoteCardComponent } from './quote-card/quote-card.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     QuoteComponent,
     DeleteModalComponent,
-    QuoteAddComponent
+    QuoteAddComponent,
+    QuoteCardComponent
   ],
   imports: [
     BrowserModule,

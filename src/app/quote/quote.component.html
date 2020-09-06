@@ -1,7 +1,8 @@
+<ngb-alert *ngIf="deleteSuccess" class="text-center" type="success" (close)="deleteSuccess=false">
+  <i class="fa fa-check"></i>
+  The quote has been deleted successfully.
+</ngb-alert>
 <div class="container">
-  <ngb-alert *ngIf="deleteSuccess" type="success" (close)="deleteSuccess=false">
-    The quote has been deleted successfully.
-  </ngb-alert>
   <form (ngSubmit)="onSave(ref)" #ref='ngForm'>
     <div class="form-group row">
       <label for="content" class="col-sm-2 col-form-label">Content: </label>
@@ -15,7 +16,12 @@
         <input type="text" id="author" class="form-control" name="authorContent" ngModel>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary mb-2" style="float: right;">Save</button>
+    <button type="submit" class="btn btn-primary mb-2" style="float: right;">
+      <span *ngIf="saving">
+        <i class="fa fa-spinner fa-spin"></i>
+      </span>
+      Save
+    </button>
     <div class="clearfix"></div>
   </form>
   <ng-template [ngIf]="!fetched()">
@@ -37,14 +43,19 @@
               <br>
               <div *ngIf="isEditing(quote.id); else showContent">
                 <form (ngSubmit)="onUpdate(ref)" #ref='ngForm'>
-                  <input type="text" class="form-control" name="quoteContent" [ngModel]="targetQuote.content">
+                  <input type="text" class="form-control" name="quoteContent" style="margin-bottom: 10px" [ngModel]="targetQuote.content">
                   <input type="text" class="form-control" name="authorContent" [ngModel]="targetQuote.author">
-                  <button type="submit" class="btn btn-primary mb-2" style="float: right;">
-                    <span *ngIf="updating">
-                      <i class="fa fa-spinner fa-spin"></i>
-                    </span>
-                    Save
-                  </button>
+                  <div style="float: right; margin-top: 15px">
+                    <button (click)="targetQuote=undefined" class="btn btn-outline-secondary mb-2" style="margin-right: 10px">
+                      Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary mb-2">
+                      <span *ngIf="updating">
+                        <i class="fa fa-spinner fa-spin"></i>
+                      </span>
+                      Update
+                    </button>
+                  </div>
                   <div class="clearfix"></div>
                 </form>
               </div>

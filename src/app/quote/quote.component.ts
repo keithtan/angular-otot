@@ -14,6 +14,7 @@ export class QuoteComponent implements OnInit {
   quotes: Quote[] = [];
   @ViewChild('ref') quoteForm: NgForm;
   targetQuote: Quote;
+  saving = false;
   updating = false;
   deleteSuccess = false;
 
@@ -43,13 +44,17 @@ export class QuoteComponent implements OnInit {
   }
 
   onSave(form: NgForm) {
+    this.saving = true;
     const content = form.value.quoteContent;
     const author = form.value.authorContent;
     const quote = new Quote(content, author);
     console.log(quote);
     this.quoteService
       .addQuote(quote)
-      .subscribe(newQuote => this.quotes.push(newQuote));
+      .subscribe(newQuote => {
+        this.quotes.push(newQuote);
+        this.saving = false;
+      });
     this.quoteForm.reset();
   }
 

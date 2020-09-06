@@ -1,9 +1,7 @@
-@media (min-width: 1200px) {
-  .container{
-    margin-top: 50px;
-    max-width: 600px;
-    margin-bottom: 50px;
-  }
+.container{
+  margin-top: 50px;
+  max-width: 600px;
+  margin-bottom: 50px;
 }
 
 .fa-trash:hover {

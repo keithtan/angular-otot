@@ -12,13 +12,11 @@
     </div>
   </ng-template>
   <ng-template [ngIf]="fetched() && onSuccess(quotes)">
-    <ng-container *ngFor="let quote of quotes">
       <app-quote-card
-        [quote]="quote"
+        [quotes]="quotes"
         (updated)="onUpdate($event)"
         (deleted)="onDelete($event)">
       </app-quote-card>
-    </ng-container>
   </ng-template>
   <ng-template [ngIf]="fetched() && !onSuccess(quotes)">
     {{ quotes }}

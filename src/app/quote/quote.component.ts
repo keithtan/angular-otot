@@ -1,4 +1,4 @@
-import {Component, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {QuoteService} from '../services/quote.service';
 import {Quote} from '../models/quote';
 import {QuoteCardComponent} from '../quote-card/quote-card.component';
@@ -13,7 +13,7 @@ export class QuoteComponent implements OnInit {
   quotes: Quote[] = [];
   deleteSuccess = false;
   @ViewChild(QuoteAddComponent) private quoteAddComponent: QuoteAddComponent;
-  @ViewChildren(QuoteCardComponent) private quoteCardComponent: QueryList<QuoteCardComponent>;
+  @ViewChild(QuoteCardComponent) private quoteCardComponent: QuoteCardComponent;
 
   constructor(private quoteService: QuoteService) {}
 
@@ -27,10 +27,6 @@ export class QuoteComponent implements OnInit {
 
   onSuccess(val): boolean {
     return typeof val !== 'string';
-  }
-
-  private getQuoteComponent(quoteId: number) {
-    return this.quoteCardComponent.find(item => item.quote.id === quoteId);
   }
 
   private showQuotes() {
@@ -55,8 +51,7 @@ export class QuoteComponent implements OnInit {
   }
 
   onUpdate(updatedQuote: Quote) {
-    const quoteCard = this.getQuoteComponent(updatedQuote.id);
-    quoteCard.updating = true;
+    this.quoteCardComponent.updating = true;
     this.quoteService
       .updateQuote(updatedQuote)
       .subscribe(_ => {
@@ -65,8 +60,8 @@ export class QuoteComponent implements OnInit {
           .map(quote => {
             quote.content = updatedQuote.content;
             quote.author = updatedQuote.author;
-            quoteCard.updating = false;
-            quoteCard.targetQuote = undefined;
+            this.quoteCardComponent.updating = false;
+            this.quoteCardComponent.targetQuote = undefined;
           });
       });
   }

@@ -12,7 +12,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 export class QuoteCardComponent {
   targetQuote: Quote;
   updating = false;
-  @Input() quote: Quote;
+  @Input() quotes: Quote[];
   @Output() updated = new EventEmitter<Quote>();
   @Output() deleted = new EventEmitter<number>();
 

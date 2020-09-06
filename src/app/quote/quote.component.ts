@@ -56,6 +56,7 @@ export class QuoteComponent implements OnInit {
 
   onUpdate(updatedQuote: Quote) {
     const quoteCard = this.getQuoteComponent(updatedQuote.id);
+    quoteCard.updating = true;
     this.quoteService
       .updateQuote(updatedQuote)
       .subscribe(_ => {

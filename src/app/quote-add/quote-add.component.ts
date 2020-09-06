@@ -8,10 +8,10 @@ import {Quote} from '../models/quote';
   styleUrls: ['./quote-add.component.css']
 })
 export class QuoteAddComponent {
-  @ViewChild('ref') quoteForm: NgForm;
+  saving = false;
   @Input() quotes: Quote[];
   @Output() saved = new EventEmitter<Quote>();
-  saving = false;
+  @ViewChild('ref') quoteForm: NgForm;
 
   constructor() { }
 

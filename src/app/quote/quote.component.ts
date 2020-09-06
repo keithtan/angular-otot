@@ -11,23 +11,14 @@ import {QuoteAddComponent} from '../quote-add/quote-add.component';
 })
 export class QuoteComponent implements OnInit {
   quotes: Quote[] = [];
+  deleteSuccess = false;
   @ViewChild(QuoteAddComponent) private quoteAddComponent: QuoteAddComponent;
   @ViewChild(QuoteCardComponent) private quoteCardComponent: QuoteCardComponent;
-  deleteSuccess = false;
 
   constructor(private quoteService: QuoteService) {}
 
   ngOnInit(): void {
     this.showQuotes();
-  }
-
-  private showQuotes() {
-    this.quoteService.getQuotes()
-      .subscribe((data: Quote[]) => {
-        this.quotes = data;
-      }, error => {
-        this.quotes = error;
-      });
   }
 
   fetched(): boolean {
@@ -36,6 +27,16 @@ export class QuoteComponent implements OnInit {
 
   onSuccess(val): boolean {
     return typeof val !== 'string';
+  }
+
+  private showQuotes() {
+    this.quoteService
+      .getQuotes()
+      .subscribe((data: Quote[]) => {
+        this.quotes = data;
+      }, error => {
+        this.quotes = error;
+      });
   }
 
   onSave(newQuote: Quote) {
@@ -51,9 +52,11 @@ export class QuoteComponent implements OnInit {
 
   onUpdate(updatedQuote: Quote) {
     this.quoteCardComponent.updating = true;
-    this.quoteService.updateQuote(updatedQuote)
+    this.quoteService
+      .updateQuote(updatedQuote)
       .subscribe(_ => {
-        this.quotes.filter(quote => quote.id === updatedQuote.id)
+        this.quotes
+          .filter(quote => quote.id === updatedQuote.id)
           .map(quote => {
             quote.content = updatedQuote.content;
             quote.author = updatedQuote.author;
@@ -64,8 +67,8 @@ export class QuoteComponent implements OnInit {
   }
 
   onDelete(quoteId: number) {
-    console.log(quoteId);
-    this.quoteService.deleteQuote(quoteId)
+    this.quoteService
+      .deleteQuote(quoteId)
       .subscribe(_ => {
         this.quotes = this.quotes
           .filter(quote => quote.id !== quoteId);

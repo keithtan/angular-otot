@@ -10,11 +10,11 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./quote-card.component.css']
 })
 export class QuoteCardComponent {
+  targetQuote: Quote;
+  updating = false;
   @Input() quote: Quote;
   @Output() updated = new EventEmitter<Quote>();
   @Output() deleted = new EventEmitter<number>();
-  targetQuote: Quote;
-  updating = false;
 
   constructor(private modalService: NgbModal) { }
 
@@ -38,12 +38,13 @@ export class QuoteCardComponent {
   }
 
   openModal(quoteId: number) {
-    this.modalService.open(DeleteModalComponent).result
+    this.modalService
+      .open(DeleteModalComponent)
+      .result
       .then((result) => {
         if (result === 'Delete') {
           this.deleted.emit(quoteId);
         }
       });
   }
-
 }

@@ -3,7 +3,7 @@
   The quote has been deleted successfully.
 </ngb-alert>
 <div class="container">
-  <app-quote-add [quotes]="quotes"></app-quote-add>
+  <app-quote-add [quotes]="quotes" (saved)="onSave($event)"></app-quote-add>
   <ng-template [ngIf]="!fetched()">
     <div class="d-flex justify-content-center">
       <div class="spinner-border" role="status">

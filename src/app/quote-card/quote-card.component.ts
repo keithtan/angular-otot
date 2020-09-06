@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {DeleteModalComponent} from '../delete-modal/delete-modal.component';
 import {Quote} from '../models/quote';
 import {NgForm} from '@angular/forms';
@@ -9,7 +9,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './quote-card.component.html',
   styleUrls: ['./quote-card.component.css']
 })
-export class QuoteCardComponent implements OnInit {
+export class QuoteCardComponent {
   @Input() quote: Quote;
   @Output() updated = new EventEmitter<Quote>();
   @Output() deleted = new EventEmitter<number>();
@@ -17,9 +17,6 @@ export class QuoteCardComponent implements OnInit {
   updating = false;
 
   constructor(private modalService: NgbModal) { }
-
-  ngOnInit(): void {
-  }
 
   update(quote: Quote) {
     this.targetQuote = quote;
@@ -44,7 +41,6 @@ export class QuoteCardComponent implements OnInit {
     this.modalService.open(DeleteModalComponent).result
       .then((result) => {
         if (result === 'Delete') {
-          console.log(result);
           this.deleted.emit(quoteId);
         }
       });

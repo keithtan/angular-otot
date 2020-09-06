@@ -1,36 +1,25 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {Quote} from '../models/quote';
-import {QuoteService} from '../services/quote.service';
 
 @Component({
   selector: 'app-quote-add',
   templateUrl: './quote-add.component.html',
   styleUrls: ['./quote-add.component.css']
 })
-export class QuoteAddComponent implements OnInit {
-  saving = false;
-  @Input() quotes: Quote[];
+export class QuoteAddComponent {
   @ViewChild('ref') quoteForm: NgForm;
+  @Input() quotes: Quote[];
+  @Output() saved = new EventEmitter<Quote>();
+  saving = false;
 
-  constructor(private quoteService: QuoteService) { }
-
-  ngOnInit(): void {
-  }
+  constructor() { }
 
   onSave(form: NgForm) {
-    this.saving = true;
     const content = form.value.quoteContent;
     const author = form.value.authorContent;
-    const quote = new Quote(content, author);
-    console.log(quote);
-    this.quoteService
-      .addQuote(quote)
-      .subscribe(newQuote => {
-        this.quotes.push(newQuote);
-        this.saving = false;
-      });
-    this.quoteForm.reset();
+    const newQuote = new Quote(content, author);
+    this.saved.emit(newQuote);
   }
 
 }
